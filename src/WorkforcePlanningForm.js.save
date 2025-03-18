@@ -1,10 +1,8 @@
-import { useState } from "react";
 import axios from "axios";
-import { Label } from "@radix-ui/react-label";
-
-// Custom UI Components
 const Card = ({ children }) => <div className="border rounded-md p-4 bg-white shadow">{children}</div>;
 const CardContent = ({ children }) => <div>{children}</div>;
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
+import { Label } from "@radix-ui/react-label";
 const Button = ({ onClick, children }) => (
   <button className="bg-blue-500 text-white px-4 py-2 rounded-md w-full" onClick={onClick}>
     {children}
@@ -106,7 +104,7 @@ export default function WorkforcePlanningForm() {
     };
 
     try {
-      await axios.post("/api/send-email", data);
+      await axios.post("YOUR_BACKEND_API/send-email", data);
       alert("Results emailed successfully!");
     } catch (error) {
       console.error("Error sending email", error);
@@ -125,21 +123,18 @@ export default function WorkforcePlanningForm() {
         onChange={(e) => setEmail(e.target.value)}
       />
       {categories.map((category) => (
-        <Card key={category.name} className="mb-4">
-          <CardContent className="p-4">
-            <Label className="font-semibold">{category.name}</Label>
-            <p className="text-sm text-gray-600 mb-2">Select the option that best describes your organization.</p>
-            <select
-              className="border p-2 rounded-md w-full"
-              onChange={(e) => handleSelectChange(category.name, e.target.value)}
-            >
-              <option value="">Select a level</option>
-              {category.levels.map((level, index) => (
-                <option key={index} value={level}>{level} - {category.descriptions[index]}</option>
-              ))}
-            </select>
-          </CardContent>
-        </Card>
+        <div key={category.name} className="mb-4">
+          <label className="block font-semibold">{category.name}</label>
+          <select
+            className="border p-2 rounded-md w-full"
+            onChange={(e) => handleSelectChange(category.name, e.target.value)}
+          >
+            <option value="">Select level</option>
+            {category.levels.map((level, index) => (
+              <option key={index} value={level}>{level}</option>
+            ))}
+          </select>
+        </div>
       ))}
       <Button
         onClick={handleEmailResults}
@@ -150,4 +145,5 @@ export default function WorkforcePlanningForm() {
     </div>
   );
 }
+
 
